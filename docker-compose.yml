@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: sales_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - sales_network
+
+  python:
+    build: .
+    container_name: python-container
+    depends_on:
+      - mysql
+    environment:
+      - DB_URL=mysql+pymysql://root:rootpassword@mysql/sales_db
+      - CREDENTIALS_FILE=/path/to/credentials.json
+    volumes:
+      - .:/app
+    networks:
+      - sales_network
+
+networks:
+  sales_network:
+    driver: bridge

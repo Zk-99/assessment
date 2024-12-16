@@ -1,0 +1,6 @@
+pandas
+SQLAlchemy
+openpyxl
+google-auth-oauthlib
+google-api-python-client
+smtplib
